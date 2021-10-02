@@ -1,3 +1,4 @@
+import asyncio
 from math import atan
 import random
 from pathlib import Path
@@ -16,7 +17,7 @@ EDGE_DRIVER = "msedgedriver.exe"
 BASE_URL = "https://kamekokamekame.net"
 
 
-def run_browser(num):
+async def run_browser(num):
     p = Path(".") / EDGE_DRIVER
 
     # システム側が出すエラーログを消す処理
@@ -36,7 +37,7 @@ def run_browser(num):
                 if BASE_URL in a_tag.get_attribute("href"):
                     links = driver.find_elements_by_link_text(a_tag.text)
                     links[0].click()
-                    time.sleep(1)
+                    await asyncio.sleep(1)
                     break
         except ElementNotVisibleException:
             print("ElementNotVisibleException")
