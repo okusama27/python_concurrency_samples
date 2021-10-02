@@ -1,7 +1,10 @@
-import time
+from math import atan
+import random
 from pathlib import Path
-from msedge.selenium_tools import Edge, EdgeOptions
+import time
 
+from msedge.selenium_tools import Edge, EdgeOptions
+from selenium.common.exceptions import ElementNotVisibleException, InvalidSelectorException, NoSuchElementException,InvalidSwitchToTargetException,NoSuchAttributeException
 EDGE_DRIVER = "msedgedriver.exe"
 BASE_URL = "https://kamekokamekame.net"
 
@@ -18,15 +21,31 @@ def run_browser(num):
     driver.get(BASE_URL)
 
     for _ in range(10):
-        print(f"{num} - {driver.title}")
-        a_tags = driver.find_elements_by_tag_name("a")
-        for a_tag in a_tags[(6 + num) :]:
-            if len(a_tag.get_attribute("href")) > 50:
-                links = driver.find_elements_by_link_text(a_tag.text)
-                links[0].click()
-                break
-
-        time.sleep(1)
+        try:
+            print(f"{num} - {driver.title}")
+            a_tags = driver.find_elements_by_tag_name("a")
+            link_no = random.randrange(6, 11)
+            for a_tag in a_tags[link_no:]:
+                if BASE_URL in a_tag.get_attribute("href"):
+                    links = driver.find_elements_by_link_text(a_tag.text)
+                    links[0].click()
+                    time.sleep(1)
+                    break
+        except ElementNotVisibleException:
+            print("ElementNotVisibleException")
+            continue
+        except InvalidSelectorException:
+            print("InvalidSelectorException")
+            continue
+        except InvalidSwitchToTargetException:
+            print("InvalidSwitchToTargetException")
+            continue
+        except NoSuchAttributeException:
+            print("NoSuchAttributeException")
+            continue
+        except NoSuchElementException:
+            print("NoSuchElementException")
+            continue
 
     driver.quit()
 
