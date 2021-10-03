@@ -4,7 +4,7 @@ import time
 import threading
 
 for i in range(5):
-    if threading.active_count() >= 2:
+    if threading.active_count() > 3:
         time.sleep(5)
         continue
 
